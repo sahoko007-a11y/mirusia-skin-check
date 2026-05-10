@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>紫外線に負けないお肌チェック</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif; background: #F7F3F1; color: #3B302C; line-height: 1.8; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 44px; }
+    .hero, .card, .result { background: #fff; border-radius: 22px; padding: 20px 16px; margin-bottom: 16px; box-shadow: 0 6px 18px rgba(90,60,50,0.08); }
+    .label { display: inline-block; background: #8B5E52; color: #fff; padding: 4px 14px; border-radius: 999px; font-size: 13px; margin-bottom: 12px; }
+    .hero { text-align: center; }
+    h1 { color: #8B5E52; font-size: 25px; line-height: 1.45; margin: 0 0 12px; }
+    .lead { text-align: left; font-size: 15px; }
+    .note { background: #fff; border-left: 5px solid #D8C3B8; padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 18px; }
+    .question { font-weight: bold; color: #8B5E52; margin-bottom: 8px; font-size: 17px; }
+    .choice { display: block; background: #FBF8F6; border: 1px solid #EADBD4; border-radius: 14px; padding: 11px 12px; margin: 8px 0; cursor: pointer; }
+    input { margin-right: 8px; accent-color: #8B5E52; }
+    button { width: 100%; border: none; background: #8B5E52; color: #fff; border-radius: 999px; padding: 15px; font-size: 17px; font-weight: bold; margin: 18px 0; cursor: pointer; }
+    .error { display: none; background: #fff4f4; color: #9a3f3f; border: 1px solid #efcccc; border-radius: 12px; padding: 12px; margin-bottom: 16px; }
+    .result { display: none; border: 2px solid #D8C3B8; }
+    .score { color: #8B5E52; text-align: center; font-weight: bold; margin-bottom: 8px; }
+    .result h2 { color: #8B5E52; text-align: center; font-size: 22px; margin: 0 0 10px; }
+    .chartBox { background: #fff; border-radius: 18px; padding: 10px; margin: 16px 0; height: 330px; }
+    .cta { background: #F1E6E1; border-radius: 16px; padding: 14px; margin-top: 16px; }
+    .small { font-size: 12px; color: #6f625d; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="label">Mirusia 7日チャレンジ</div>
+    <h1>☀️紫外線に負けない<br>お肌チェック</h1>
+    <p class="lead">紫外線対策というと「塗る」「隠す」「浴びない」をイメージしがちですが、お肌は、睡眠・血流・胃腸・自律神経など、身体の内側ともつながっています。まずは今のお肌と身体の“現在地”を、やさしく確認してみましょう。</p>
+  </section>
+
+  <div class="note">診断ではありません😊<br>今の状態に気づくための、簡単なセルフチェックです。</div>
+
+  <form id="skinCheckForm">
+    <div class="card">
+      <div class="question">1. お肌の乾燥感</div>
+      <label class="choice"><input type="radio" name="q1" value="100">気にならない</label>
+      <label class="choice"><input type="radio" name="q1" value="75">少し気になる</label>
+      <label class="choice"><input type="radio" name="q1" value="50">夕方になると乾燥しやすい</label>
+      <label class="choice"><input type="radio" name="q1" value="25">いつも乾燥している感じがある</label>
+    </div>
+
+    <div class="card">
+      <div class="question">2. 朝のお肌の状態</div>
+      <label class="choice"><input type="radio" name="q2" value="100">ハリや元気を感じる</label>
+      <label class="choice"><input type="radio" name="q2" value="75">普通</label>
+      <label class="choice"><input type="radio" name="q2" value="50">むくみやすい</label>
+      <label class="choice"><input type="radio" name="q2" value="25">朝から疲れて見える</label>
+    </div>
+
+    <div class="card">
+      <div class="question">3. くすみ感</div>
+      <label class="choice"><input type="radio" name="q3" value="100">気にならない</label>
+      <label class="choice"><input type="radio" name="q3" value="75">時々気になる</label>
+      <label class="choice"><input type="radio" name="q3" value="50">最近気になることが増えた</label>
+      <label class="choice"><input type="radio" name="q3" value="25">いつも気になっている</label>
+    </div>
+
+    <div class="card">
+      <div class="question">4. 首肩の状態</div>
+      <label class="choice"><input type="radio" name="q4" value="100">軽い</label>
+      <label class="choice"><input type="radio" name="q4" value="75">少し張る</label>
+      <label class="choice"><input type="radio" name="q4" value="50">よく硬くなる</label>
+      <label class="choice"><input type="radio" name="q4" value="25">常に重い・硬い</label>
+    </div>
+
+    <div class="card">
+      <div class="question">5. 呼吸の感じ</div>
+      <label class="choice"><input type="radio" name="q5" value="100">深く吸える感じがある</label>
+      <label class="choice"><input type="radio" name="q5" value="75">普通</label>
+      <label class="choice"><input type="radio" name="q5" value="50">浅い気がする</label>
+      <label class="choice"><input type="radio" name="q5" value="25">気づくと息を止めていることがある</label>
+    </div>
+
+    <div class="card">
+      <div class="question">6. 睡眠の状態</div>
+      <label class="choice"><input type="radio" name="q6" value="100">朝までぐっすり眠れる</label>
+      <label class="choice"><input type="radio" name="q6" value="75">時々起きる</label>
+      <label class="choice"><input type="radio" name="q6" value="50">寝ても疲れが残る</label>
+      <label class="choice"><input type="radio" name="q6" value="25">朝からだるいことが多い</label>
+    </div>
+
+    <button type="button" id="resultButton">結果を見る</button>
+    <div class="error" id="errorMessage">未回答の項目があります。6つすべて選んでください😊</div>
+  </form>
+
+  <section class="result" id="resultArea">
+    <div class="score" id="scoreArea"></div>
+    <h2 id="titleArea"></h2>
+    <p id="messageArea"></p>
+    <div class="chartBox"><canvas id="radarChart"></canvas></div>
+    <div class="cta">☀️今回の7日チャレンジでは、<br>「生活を完璧に整える」のではなく、<br>1日1つだけ意識して、小さな1歩を積み重ねていきます。<br><br>気負わず、楽しみながら一緒に整えていきましょう🌿</div>
+    <div class="small">※このチェックは医療的な診断ではありません。お肌と身体の状態に気づくためのセルフチェックです。</div>
+  </section>
+</div>
+
+<script>
+let radarChart = null;
+document.getElementById("resultButton").addEventListener("click", function() {
+  const values = [];
+  for (let i = 1; i <= 6; i++) {
+    const selected = document.querySelector('input[name="q' + i + '"]:checked');
+    if (!selected) {
+      document.getElementById("errorMessage").style.display = "block";
+      document.getElementById("resultArea").style.display = "none";
+      return;
+    }
+    values.push(Number(selected.value));
+  }
+
+  document.getElementById("errorMessage").style.display = "none";
+  const average = Math.round(values.reduce((a, b) => a + b, 0) / values.length);
+  let title = "";
+  let message = "";
+
+  if (average >= 80) {
+    title = "🌿回復力キープタイプ";
+    message = "今のお肌と身体は、比較的“整いやすい状態”を保てているかもしれません。今の良い流れを大切にしながら、紫外線に負けにくい土台をさらに育てていきましょう。";
+  } else if (average >= 60) {
+    title = "☀️巡りお疲れタイプ";
+    message = "お肌そのものよりも、睡眠・血流・首肩まわりなど、身体の巡りが少しお疲れ気味かもしれません。小さな習慣で、内側から整えるきっかけを作っていきましょう。";
+  } else if (average >= 40) {
+    title = "🌿頑張りすぎタイプ";
+    message = "気づかないうちに、身体が“緊張モード”になっている可能性があります。呼吸・睡眠・胃腸を少し整えることで、お肌の回復力にもつながりやすくなります。";
+  } else {
+    title = "☀️回復力サポートタイプ";
+    message = "今は、お肌だけでなく身体全体の“回復する力”をサポートしてあげたい状態かもしれません。頑張って変えるより、まずは1日1つ、小さく整えることから始めてみましょう。";
+  }
+
+  document.getElementById("scoreArea").textContent = "あなたの現在地：" + average + "点 / 100点";
+  document.getElementById("titleArea").textContent = title;
+  document.getElementById("messageArea").textContent = message;
+  document.getElementById("resultArea").style.display = "block";
+
+  const ctx = document.getElementById("radarChart").getContext("2d");
+  if (radarChart) { radarChart.destroy(); }
+
+  radarChart = new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels: ["乾燥", "朝の肌", "くすみ", "首肩", "呼吸", "睡眠"],
+      datasets: [{
+        label: "現在地",
+        data: values,
+        fill: true,
+        borderColor: "#8B5E52",
+        backgroundColor: "rgba(139, 94, 82, 0.18)",
+        pointBackgroundColor: "#8B5E52",
+        pointBorderColor: "#8B5E52"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, display: false },
+          pointLabels: { font: { size: 13 }, color: "#3B302C" },
+          grid: { color: "#E4D6D0" },
+          angleLines: { color: "#E4D6D0" }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  document.getElementById("resultArea").scrollIntoView({ behavior: "smooth" });
+});
+</script>
+</body>
+</html>
