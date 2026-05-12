@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sia-Smile ご予約フォーム</title>
+<style>
+  :root{
+    --bg:#F7F3F1;
+    --card:#FFFDFB;
+    --pink:#C98A96;
+    --pink-soft:#F3E2E5;
+    --brown:#8B5E52;
+    --text:#3B302C;
+    --muted:#6F625E;
+    --line:#EADDDD;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    background:linear-gradient(180deg,#F7F3F1 0%,#FFF9F7 100%);
+    color:var(--text);
+    line-height:1.7;
+  }
+  .app{
+    width:min(100%,520px);
+    margin:0 auto;
+    min-height:100vh;
+    padding:22px 18px 34px;
+  }
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .brand{
+    font-weight:700;
+    font-size:20px;
+    color:var(--text);
+  }
+  .pill{
+    font-size:13px;
+    color:var(--brown);
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 12px;
+  }
+  .card{
+    background:rgba(255,253,251,.92);
+    border-radius:26px;
+    padding:24px 20px;
+    box-shadow:0 14px 34px rgba(139,94,82,.10);
+    border:1px solid rgba(234,221,221,.8);
+  }
+  h1{
+    font-size:24px;
+    line-height:1.45;
+    margin:0 0 16px;
+    letter-spacing:.02em;
+  }
+  h2{
+    font-size:20px;
+    margin:0 0 14px;
+  }
+  p{
+    margin:0 0 14px;
+    font-size:15px;
+    color:var(--muted);
+  }
+  .question-title{
+    font-size:22px;
+    font-weight:700;
+    color:var(--text);
+    line-height:1.55;
+    margin-bottom:12px;
+  }
+  .small{
+    font-size:13px;
+    color:var(--muted);
+  }
+  .category{
+    margin-top:22px;
+    margin-bottom:8px;
+    font-weight:700;
+    color:var(--text);
+    font-size:15px;
+  }
+  .option{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:7px 4px;
+    margin:4px 0;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    user-select:none;
+    border-radius:12px;
+  }
+  .option:hover{
+    background:rgba(243,226,229,.45);
+  }
+  .box{
+    width:17px;
+    height:17px;
+    border:1.8px solid #9E9290;
+    border-radius:3px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    background:#fff;
+  }
+  .option.selected{
+    background:rgba(243,226,229,.75);
+    color:var(--brown);
+  }
+  .option.selected .box{
+    background:var(--pink);
+    border-color:var(--pink);
+  }
+  .option.selected .box:after{
+    content:"✓";
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    line-height:1;
+  }
+  textarea,input{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:#fff;
+    padding:14px;
+    font-size:16px;
+    font-family:inherit;
+    color:var(--text);
+  }
+  textarea{min-height:92px;resize:vertical}
+  .buttons{
+    display:flex;
+    gap:12px;
+    margin-top:24px;
+  }
+  button{
+    border:none;
+    border-radius:999px;
+    font-family:inherit;
+    font-weight:700;
+    font-size:16px;
+    padding:13px 18px;
+    cursor:pointer;
+  }
+  .primary{
+    flex:1;
+    background:var(--pink);
+    color:#fff;
+    box-shadow:0 8px 18px rgba(201,138,150,.28);
+  }
+  .secondary{
+    background:#fff;
+    color:var(--brown);
+    border:1px solid var(--line);
+  }
+  .result{
+    background:linear-gradient(180deg,#FFF7F7,#FFFDFB);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:18px;
+    margin:18px 0;
+  }
+  .result strong{
+    color:var(--brown);
+    font-size:18px;
+  }
+  .summary{
+    white-space:pre-wrap;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    font-size:14px;
+    color:var(--text);
+  }
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand">🌿 ご予約フォーム</div>
+    <div class="pill" id="stepPill">STEP 1</div>
+  </div>
+  <div class="card" id="screen"></div>
+</div>
+
+<script>
+const data = {
+  step1: [],
+  step1Other: "",
+  painFeel: [],
+  painPlace: [],
+  step2Other: "",
+  timing: [],
+  timingOther: "",
+  resultType: "",
+  booking: "",
+  preferredDate: "",
+  preferredDate2: "",
+  availableTime: [],
+  name: "",
+  phone: ""
+};
+let page = 0;
+
+const screens = [intro, step1, step2, step3, result, booking, contact, complete];
+
+function setPill(){
+  const pill = document.getElementById("stepPill");
+  if(page === 0) pill.textContent = "はじめに";
+  else if(page <= 6) pill.textContent = "STEP " + page;
+  else pill.textContent = "完了";
+}
+
+function render(){
+  setPill();
+  document.getElementById("screen").innerHTML = screens[page]();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function next(){
+  if(page === 3) decideResult();
+  page = Math.min(page+1, screens.length-1);
+  render();
+}
+function back(){
+  page = Math.max(page-1,0);
+  render();
+}
+function toggle(arr, value){
+  const i = data[arr].indexOf(value);
+  if(i >= 0) data[arr].splice(i,1);
+  else data[arr].push(value);
+  render();
+}
+function option(arr, label){
+  const selected = data[arr].includes(label) ? "selected" : "";
+  return `<div class="option ${selected}" onclick="toggle('${arr}','${label}')"><span class="box"></span><span>${label}</span></div>`;
+}
+function radio(name, label){
+  const selected = data[name] === label ? "selected" : "";
+  return `<div class="option ${selected}" onclick="data.${name}='${label}'; render();"><span class="box"></span><span>${label}</span></div>`;
+}
+
+function intro(){
+return `
+  <h1>🌿 ご予約フォーム</h1>
+  <p>現在のお身体の状態について、</p>
+  <p>当てはまるものにチェックを入れてください😊</p>
+  <div class="buttons"><button class="primary" onclick="next()">入力をはじめる</button></div>
+`;
+}
+
+function step1(){
+return `
+  <div class="question-title">当てはまるものにチェックを入れてください。（複数選択可）</div>
+
+  <div class="category">【頭痛について】</div>
+  ${option("step1","頭痛が出る")}
+  ${option("step1","慢性的に頭痛が続いている")}
+  ${option("step1","薬を飲みすぎている")}
+  ${option("step1","薬が効きにくくなってきた")}
+
+  <div class="category">【一緒に出やすい症状】</div>
+  ${option("step1","吐き気を伴う頭痛がある")}
+  ${option("step1","閃輝暗点がある")}
+  ${option("step1","首や肩がつらい")}
+  ${option("step1","朝起きるのがつらい")}
+
+  <div class="category">【影響を受けやすいタイミング】</div>
+  ${option("step1","気圧の変化に弱い")}
+  ${option("step1","生理前後に頭痛が出る")}
+
+  <div class="category">【その他】</div>
+  ${option("step1","子どもの頭痛で悩んでいる")}
+  ${option("step1","どこに相談したらいいか分からない")}
+
+  <p style="margin-top:18px;color:var(--text);font-weight:600;">その他、気になる症状があればご自由にご記入ください😊</p>
+  <textarea oninput="data.step1Other=this.value">${data.step1Other}</textarea>
+
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">次へ</button>
+  </div>
+`;
+}
+
+function step2(){
+return `
+  <div class="question-title">もう少しだけ、頭痛について教えてください😊</div>
+  <p>当てはまるものにチェックを入れてください。<br>（複数選択可）</p>
+
+  <div class="category">【痛みの感じ】</div>
+  ${option("painFeel","ズキズキする")}
+  ${option("painFeel","締め付けられる感じ")}
+  ${option("painFeel","重だるい")}
+  ${option("painFeel","ガンガンする")}
+  ${option("painFeel","頭がボーッとする")}
+  ${option("painFeel","光がつらい")}
+  ${option("painFeel","音がつらい")}
+
+  <div class="category">【痛む場所】</div>
+  ${option("painPlace","おでこ")}
+  ${option("painPlace","こめかみ")}
+  ${option("painPlace","頭頂部")}
+  ${option("painPlace","後頭部")}
+  ${option("painPlace","目の奥")}
+  ${option("painPlace","首〜肩")}
+  ${option("painPlace","頭全体")}
+  ${option("painPlace","日によって違う")}
+
+  <p style="margin-top:18px;color:var(--text);font-weight:600;">その他、気になる特徴があればご自由にご記入ください😊</p>
+  <textarea oninput="data.step2Other=this.value">${data.step2Other}</textarea>
+
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">次へ</button>
+  </div>
+`;
+}
+
+function step3(){
+return `
+  <div class="question-title">どんな時に頭痛が出やすいですか？</div>
+  <p>当てはまるものにチェックを入れてください。<br>（複数選択可）</p>
+
+  <div class="category">【出やすいタイミング】</div>
+  ${option("timing","低気圧・天気が悪い日")}
+  ${option("timing","生理前後")}
+  ${option("timing","疲れが溜まった時")}
+  ${option("timing","ストレスを感じた時")}
+  ${option("timing","忙しい日が続いた時")}
+  ${option("timing","長時間スマホ・PCを見た後")}
+  ${option("timing","朝起きた時")}
+  ${option("timing","夕方〜夜")}
+  ${option("timing","学校・仕事中")}
+
+  <div class="category">【その他】</div>
+  ${option("timing","特に決まっていない")}
+  ${option("timing","分からない")}
+
+  <p style="margin-top:18px;color:var(--text);font-weight:600;">その他、気になることがあればご自由にご記入ください😊</p>
+  <textarea oninput="data.timingOther=this.value">${data.timingOther}</textarea>
+
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">結果を見る</button>
+  </div>
+`;
+}
+
+function decideResult(){
+  const all = [...data.step1,...data.painFeel,...data.painPlace,...data.timing].join(" ");
+  if(all.includes("生理")) data.resultType = "女性ホルモン影響タイプ";
+  else if(all.includes("薬を飲みすぎ") || all.includes("薬が効きにく")) data.resultType = "薬に頼りながら頑張っているタイプ";
+  else if(all.includes("ズキズキ") || all.includes("吐き気") || all.includes("光") || all.includes("音") || all.includes("閃輝暗点")) data.resultType = "偏頭痛タイプ";
+  else if(all.includes("気圧") || all.includes("朝") || all.includes("分からない")) data.resultType = "自律神経・環境影響タイプ";
+  else data.resultType = "緊張・頑張り続けタイプ";
+}
+
+const resultText = {
+  "緊張・頑張り続けタイプ":"現在のお身体は、常に力が入り続けている状態かもしれません。頭痛だけでなく、首肩の緊張や「休んでも疲れが抜けない」と感じる方も多くいらっしゃいます。",
+  "偏頭痛タイプ":"ズキズキする痛みや、吐き気・光や音のつらさなど、身体が刺激に敏感になっている状態かもしれません。気圧や疲労、睡眠不足などの影響を受けやすい方も多くいらっしゃいます。",
+  "薬に頼りながら頑張っているタイプ":"頭痛を薬で抑えながら、毎日を頑張り続けている状態かもしれません。薬が効きにくくなったり、頭痛の頻度が増えている方は、身体からのSOSが出ている可能性もあります。",
+  "自律神経・環境影響タイプ":"気圧や疲労、生活リズムの影響を受けやすく、身体が環境変化に振り回されやすい状態かもしれません。「朝がつらい」「天気で体調が変わる」という方も多くいらっしゃいます。",
+  "女性ホルモン影響タイプ":"生理前後の頭痛や不調は、女性ホルモンや自律神経バランスの影響を受けている可能性があります。「毎月つらいのが当たり前」になっている方も少なくありません。"
+};
+
+function result(){
+return `
+  <div class="question-title">チェック結果</div>
+  <div class="result">
+    <strong>${data.resultType}</strong>
+    <p style="margin-top:12px;color:var(--text);">${resultText[data.resultType]}</p>
+  </div>
+  <p style="color:var(--text);">当院で、同じようなお悩みの方が改善されています🌿</p>
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">予約について進む</button>
+  </div>
+`;
+}
+
+function booking(){
+return `
+  <div class="question-title">ご予約について教えてください</div>
+  ${radio("booking","ご希望日が決まっている")}
+  ${radio("booking","予約可能日を知りたい")}
+
+  ${data.booking === "ご希望日が決まっている" ? `
+    <div class="category">【ご希望日時】</div>
+    <input type="text" placeholder="第1希望　例：5月20日 午前希望" value="${data.preferredDate}" oninput="data.preferredDate=this.value">
+    <div style="height:10px;"></div>
+    <input type="text" placeholder="第2希望　例：5月22日 午後希望" value="${data.preferredDate2}" oninput="data.preferredDate2=this.value">
+  ` : ""}
+
+  ${data.booking === "予約可能日を知りたい" ? `
+    <div class="category">【ご都合のつきやすい時間帯】</div>
+    ${option("availableTime","平日午前")}
+    ${option("availableTime","平日午後（最終受付16時30分）")}
+    ${option("availableTime","特に指定なし")}
+  ` : ""}
+
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">次へ</button>
+  </div>
+`;
+}
+
+function contact(){
+return `
+  <div class="question-title">最後にご連絡先を教えてください</div>
+  <p>現在のお身体の状態を確認しながら、ご案内させていただきます🌿</p>
+  <div class="category">【お名前】</div>
+  <input type="text" value="${data.name}" oninput="data.name=this.value" placeholder="例：頭痛 治子">
+  <div class="category">【電話番号】</div>
+  <input type="tel" value="${data.phone}" oninput="data.phone=this.value" placeholder="例：090-0000-0000">
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+    <button class="primary" onclick="next()">送信する</button>
+  </div>
+`;
+}
+
+function makeSummary(){
+return `【Sia-Smile 頭痛チェック回答】
+
+■チェック結果
+${data.resultType}
+
+■今のお悩み
+${data.step1.join("、") || "未選択"}
+${data.step1Other ? "その他：" + data.step1Other : ""}
+
+■痛みの感じ
+${data.painFeel.join("、") || "未選択"}
+
+■痛む場所
+${data.painPlace.join("、") || "未選択"}
+${data.step2Other ? "その他：" + data.step2Other : ""}
+
+■出やすいタイミング
+${data.timing.join("、") || "未選択"}
+${data.timingOther ? "その他：" + data.timingOther : ""}
+
+■予約について
+${data.booking || "未選択"}
+${data.preferredDate ? "第1希望：" + data.preferredDate : ""}
+${data.preferredDate2 ? "第2希望：" + data.preferredDate2 : ""}
+${data.availableTime.length ? "都合の良い時間帯：" + data.availableTime.join("、") : ""}
+
+■お名前
+${data.name || "未入力"}
+
+■電話番号
+${data.phone || "未入力"}`;
+}
+
+function complete(){
+return `
+  <div class="question-title">ご入力ありがとうございます😊</div>
+  <p>下の内容をコピーして、LINEに貼り付けてお送りください。</p>
+  <div class="summary" id="summary">${makeSummary()}</div>
+  <div class="buttons">
+    <button class="primary" onclick="copyText()">回答内容をコピーする</button>
+  </div>
+  <div class="buttons">
+    <button class="secondary" onclick="back()">戻る</button>
+  </div>
+`;
+}
+function copyText(){
+  navigator.clipboard.writeText(makeSummary()).then(()=>alert("回答内容をコピーしました😊"));
+}
+
+render();
+</script>
+</body>
+</html>
