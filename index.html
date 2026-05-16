@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,6 +32,7 @@
     .chartBox { background: #fff; border-radius: 18px; padding: 10px; margin: 16px 0; height: 330px; }
     .cta { background: #F1E6E1; border-radius: 16px; padding: 14px; margin-top: 16px; }
     .small { font-size: 12px; color: #6f625d; margin-top: 12px; }
+    .savedNotice { background:#FBF8F6; border:1px solid #EADBD4; border-radius:14px; padding:12px; margin-top:12px; font-size:13px; color:#6f625d; text-align:center; }
   </style>
 </head>
 <body>
@@ -41,71 +43,26 @@
     <p class="lead">紫外線対策というと「塗る」「隠す」「浴びない」をイメージしがちですが、お肌は、睡眠・血流・胃腸・自律神経など、身体の内側ともつながっています。まずは今のお肌と身体の“現在地”を、やさしく確認してみましょう。</p>
   </section>
 
-  <div class="note">
-    診断ではありません😊<br>
-    今の状態に気づくための、簡単なセルフチェックです。<br><br>
-    初回は「ビフォーチェック」、7日チャレンジ後は「アフターチェック」を選んでください🌿
-  </div>
+  <div class="note">診断ではありません😊<br>今の状態に気づくための、簡単なセルフチェックです。<br><br>初回は「ビフォーチェック」、7日チャレンジ後は「アフターチェック」を選んでください🌿</div>
 
   <section class="modeBox" id="modeBox">
     <div class="modeTitle">どちらでチェックしますか？</div>
     <div class="modeText">質問内容はビフォーもアフターも同じです。</div>
     <button type="button" id="beforeModeButton">ビフォーチェックをする</button>
     <button type="button" class="afterBtn" id="afterModeButton">アフターチェックをする</button>
-    <div class="small">※ビフォー結果は、この端末のブラウザ内に保存されます。</div>
+    <div class="savedNotice" id="savedNotice"></div>
+    <div class="small">※ビフォー結果・アフター結果は、この端末のブラウザ内に保存されます。</div>
   </section>
 
   <div class="currentMode" id="currentMode"></div>
 
   <form id="skinCheckForm" style="display:none;">
-    <div class="card">
-      <div class="question">1. お肌の乾燥感</div>
-      <label class="choice"><input type="radio" name="q1" value="100">気にならない</label>
-      <label class="choice"><input type="radio" name="q1" value="75">少し気になる</label>
-      <label class="choice"><input type="radio" name="q1" value="50">夕方になると乾燥しやすい</label>
-      <label class="choice"><input type="radio" name="q1" value="25">いつも乾燥している感じがある</label>
-    </div>
-
-    <div class="card">
-      <div class="question">2. 朝のお肌の状態</div>
-      <label class="choice"><input type="radio" name="q2" value="100">ハリや元気を感じる</label>
-      <label class="choice"><input type="radio" name="q2" value="75">普通</label>
-      <label class="choice"><input type="radio" name="q2" value="50">むくみやすい</label>
-      <label class="choice"><input type="radio" name="q2" value="25">朝から疲れて見える</label>
-    </div>
-
-    <div class="card">
-      <div class="question">3. くすみ感</div>
-      <label class="choice"><input type="radio" name="q3" value="100">気にならない</label>
-      <label class="choice"><input type="radio" name="q3" value="75">時々気になる</label>
-      <label class="choice"><input type="radio" name="q3" value="50">最近気になることが増えた</label>
-      <label class="choice"><input type="radio" name="q3" value="25">いつも気になっている</label>
-    </div>
-
-    <div class="card">
-      <div class="question">4. 首肩の状態</div>
-      <label class="choice"><input type="radio" name="q4" value="100">軽い</label>
-      <label class="choice"><input type="radio" name="q4" value="75">少し張る</label>
-      <label class="choice"><input type="radio" name="q4" value="50">よく硬くなる</label>
-      <label class="choice"><input type="radio" name="q4" value="25">常に重い・硬い</label>
-    </div>
-
-    <div class="card">
-      <div class="question">5. 呼吸の感じ</div>
-      <label class="choice"><input type="radio" name="q5" value="100">深く吸える感じがある</label>
-      <label class="choice"><input type="radio" name="q5" value="75">普通</label>
-      <label class="choice"><input type="radio" name="q5" value="50">浅い気がする</label>
-      <label class="choice"><input type="radio" name="q5" value="25">気づくと息を止めていることがある</label>
-    </div>
-
-    <div class="card">
-      <div class="question">6. 睡眠の状態</div>
-      <label class="choice"><input type="radio" name="q6" value="100">朝までぐっすり眠れる</label>
-      <label class="choice"><input type="radio" name="q6" value="75">時々起きる</label>
-      <label class="choice"><input type="radio" name="q6" value="50">寝ても疲れが残る</label>
-      <label class="choice"><input type="radio" name="q6" value="25">朝からだるいことが多い</label>
-    </div>
-
+    <div class="card"><div class="question">1. お肌の乾燥感</div><label class="choice"><input type="radio" name="q1" value="100">気にならない</label><label class="choice"><input type="radio" name="q1" value="75">少し気になる</label><label class="choice"><input type="radio" name="q1" value="50">夕方になると乾燥しやすい</label><label class="choice"><input type="radio" name="q1" value="25">いつも乾燥している感じがある</label></div>
+    <div class="card"><div class="question">2. 朝のお肌の状態</div><label class="choice"><input type="radio" name="q2" value="100">ハリや元気を感じる</label><label class="choice"><input type="radio" name="q2" value="75">普通</label><label class="choice"><input type="radio" name="q2" value="50">むくみやすい</label><label class="choice"><input type="radio" name="q2" value="25">朝から疲れて見える</label></div>
+    <div class="card"><div class="question">3. くすみ感</div><label class="choice"><input type="radio" name="q3" value="100">気にならない</label><label class="choice"><input type="radio" name="q3" value="75">時々気になる</label><label class="choice"><input type="radio" name="q3" value="50">最近気になることが増えた</label><label class="choice"><input type="radio" name="q3" value="25">いつも気になっている</label></div>
+    <div class="card"><div class="question">4. 首肩の状態</div><label class="choice"><input type="radio" name="q4" value="100">軽い</label><label class="choice"><input type="radio" name="q4" value="75">少し張る</label><label class="choice"><input type="radio" name="q4" value="50">よく硬くなる</label><label class="choice"><input type="radio" name="q4" value="25">常に重い・硬い</label></div>
+    <div class="card"><div class="question">5. 呼吸の感じ</div><label class="choice"><input type="radio" name="q5" value="100">深く吸える感じがある</label><label class="choice"><input type="radio" name="q5" value="75">普通</label><label class="choice"><input type="radio" name="q5" value="50">浅い気がする</label><label class="choice"><input type="radio" name="q5" value="25">気づくと息を止めていることがある</label></div>
+    <div class="card"><div class="question">6. 睡眠の状態</div><label class="choice"><input type="radio" name="q6" value="100">朝までぐっすり眠れる</label><label class="choice"><input type="radio" name="q6" value="75">時々起きる</label><label class="choice"><input type="radio" name="q6" value="50">寝ても疲れが残る</label><label class="choice"><input type="radio" name="q6" value="25">朝からだるいことが多い</label></div>
     <button type="button" id="resultButton">結果を見る</button>
     <div class="error" id="errorMessage">未回答の項目があります。6つすべて選んでください😊</div>
   </form>
@@ -116,9 +73,7 @@
     <h2 id="titleArea"></h2>
     <p id="messageArea"></p>
     <div class="chartBox"><canvas id="radarChart"></canvas></div>
-
     <button type="button" class="subButton" id="backButton">TOPに戻る</button>
-
     <div class="cta" id="ctaArea"></div>
     <div class="small">※このチェックは医療的な診断ではありません。お肌と身体の状態に気づくためのセルフチェックです。結果はお使いの端末内に保存されます。</div>
   </section>
@@ -127,7 +82,10 @@
 <script>
 let radarChart = null;
 let currentMode = "";
-const storageKey = "mirusiaSkinCheckBefore";
+const beforeStorageKey = "mirusiaSkinCheckBefore";
+const afterStorageKey = "mirusiaSkinCheckAfter";
+
+window.addEventListener("load", updateSavedNotice);
 
 document.getElementById("beforeModeButton").addEventListener("click", function() {
   currentMode = "before";
@@ -135,11 +93,19 @@ document.getElementById("beforeModeButton").addEventListener("click", function()
 });
 
 document.getElementById("afterModeButton").addEventListener("click", function() {
-  const before = getBeforeData();
+  const before = getSavedData(beforeStorageKey);
+  const after = getSavedData(afterStorageKey);
+
   if (!before) {
     alert("まだビフォー結果が保存されていません😊\nまずはビフォーチェックをしてから、7日後にアフターチェックをしてください🌿");
     return;
   }
+
+  if (after) {
+    showAfterResult(before, after, true);
+    return;
+  }
+
   currentMode = "after";
   startCheck("アフターチェック");
 });
@@ -151,12 +117,12 @@ document.getElementById("backButton").addEventListener("click", function() {
   document.getElementById("currentMode").style.display = "none";
   document.getElementById("errorMessage").style.display = "none";
   clearAnswers();
+  updateSavedNotice();
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 document.getElementById("resultButton").addEventListener("click", function() {
   const values = [];
-
   for (let i = 1; i <= 6; i++) {
     const selected = document.querySelector('input[name="q' + i + '"]:checked');
     if (!selected) {
@@ -171,7 +137,6 @@ document.getElementById("resultButton").addEventListener("click", function() {
 
   const average = Math.round(values.reduce((a, b) => a + b, 0) / values.length);
   const resultText = getResultText(average);
-
   const currentResult = {
     score: average,
     values: values,
@@ -180,15 +145,13 @@ document.getElementById("resultButton").addEventListener("click", function() {
   };
 
   if (currentMode === "before") {
-    localStorage.setItem(storageKey, JSON.stringify(currentResult));
+    localStorage.setItem(beforeStorageKey, JSON.stringify(currentResult));
+    localStorage.removeItem(afterStorageKey);
     showBeforeResult(currentResult);
   } else if (currentMode === "after") {
-    const before = getBeforeData();
-    if (!before) {
-      alert("ビフォー結果が見つかりませんでした。先にビフォーチェックをしてください😊");
-      return;
-    }
-    showAfterResult(before, currentResult);
+    const before = getSavedData(beforeStorageKey);
+    localStorage.setItem(afterStorageKey, JSON.stringify(currentResult));
+    showAfterResult(before, currentResult, false);
   }
 });
 
@@ -202,21 +165,32 @@ function startCheck(modeLabel) {
   document.getElementById("skinCheckForm").scrollIntoView({ behavior: "smooth" });
 }
 
-function getBeforeData() {
-  const data = localStorage.getItem(storageKey);
+function getSavedData(key) {
+  const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 }
 
 function clearAnswers() {
-  const inputs = document.querySelectorAll('input[type="radio"]');
-  inputs.forEach(input => input.checked = false);
+  document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+}
+
+function updateSavedNotice() {
+  const before = getSavedData(beforeStorageKey);
+  const after = getSavedData(afterStorageKey);
+  const notice = document.getElementById("savedNotice");
+  if (before && after) {
+    notice.innerHTML = "保存済み：ビフォー " + before.score + "点 ／ アフター " + after.score + "点<br>アフターチェックを押すと、比較結果を見返せます😊";
+  } else if (before) {
+    notice.innerHTML = "保存済み：ビフォー " + before.score + "点<br>7日チャレンジ後に、アフターチェックができます🌿";
+  } else {
+    notice.innerHTML = "まずはビフォーチェックから始めてください😊";
+  }
 }
 
 function showBeforeResult(current) {
   document.getElementById("skinCheckForm").style.display = "none";
   document.getElementById("currentMode").style.display = "none";
   document.getElementById("scoreArea").textContent = "ビフォー現在地：" + current.score + "点 / 100点";
-  document.getElementById("compareArea").style.display = "block";
   document.getElementById("compareArea").innerHTML = "ビフォー結果を保存しました😊<br>7日チャレンジ後に、アフターチェックで変化を見てみましょう🌿";
   document.getElementById("titleArea").textContent = current.title;
   document.getElementById("messageArea").textContent = getResultText(current.score).message;
@@ -226,10 +200,9 @@ function showBeforeResult(current) {
   document.getElementById("resultArea").scrollIntoView({ behavior: "smooth" });
 }
 
-function showAfterResult(before, current) {
+function showAfterResult(before, current, isReview) {
   const diff = current.score - before.score;
   let diffText = "";
-
   if (diff > 0) {
     diffText = "前回より +" + diff + "点 🌿<br>小さな意識の積み重ねが、整う方向への一歩になっているかもしれません😊";
   } else if (diff === 0) {
@@ -238,10 +211,10 @@ function showAfterResult(before, current) {
     diffText = "前回より " + diff + "点<br>お肌や身体は、睡眠・疲れ・季節によってもゆらぎます。責めずに、今の状態をやさしく見ていきましょう🌿";
   }
 
+  document.getElementById("modeBox").style.display = "none";
   document.getElementById("skinCheckForm").style.display = "none";
   document.getElementById("currentMode").style.display = "none";
-  document.getElementById("scoreArea").textContent = "アフター現在地：" + current.score + "点 / 100点";
-  document.getElementById("compareArea").style.display = "block";
+  document.getElementById("scoreArea").textContent = isReview ? "保存済みの比較結果" : "アフター現在地：" + current.score + "点 / 100点";
   document.getElementById("compareArea").innerHTML = "ビフォー：" + before.score + "点　→　アフター：" + current.score + "点<br>" + diffText;
   document.getElementById("titleArea").textContent = current.title;
   document.getElementById("messageArea").textContent = getResultText(current.score).message;
@@ -253,25 +226,13 @@ function showAfterResult(before, current) {
 
 function getResultText(average) {
   if (average >= 80) {
-    return {
-      title: "🌿回復力キープタイプ",
-      message: "今のお肌と身体は、比較的“整いやすい状態”を保てているかもしれません。今の良い流れを大切にしながら、紫外線に負けにくい土台をさらに育てていきましょう。"
-    };
+    return { title: "🌿回復力キープタイプ", message: "今のお肌と身体は、比較的“整いやすい状態”を保てているかもしれません。今の良い流れを大切にしながら、紫外線に負けにくい土台をさらに育てていきましょう。" };
   } else if (average >= 60) {
-    return {
-      title: "☀️巡りお疲れタイプ",
-      message: "お肌そのものよりも、睡眠・血流・首肩まわりなど、身体の巡りが少しお疲れ気味かもしれません。小さな習慣で、内側から整えるきっかけを作っていきましょう。"
-    };
+    return { title: "☀️巡りお疲れタイプ", message: "お肌そのものよりも、睡眠・血流・首肩まわりなど、身体の巡りが少しお疲れ気味かもしれません。小さな習慣で、内側から整えるきっかけを作っていきましょう。" };
   } else if (average >= 40) {
-    return {
-      title: "🌿頑張りすぎタイプ",
-      message: "気づかないうちに、身体が“緊張モード”になっている可能性があります。呼吸・睡眠・胃腸を少し整えることで、お肌の回復力にもつながりやすくなります。"
-    };
+    return { title: "🌿頑張りすぎタイプ", message: "気づかないうちに、身体が“緊張モード”になっている可能性があります。呼吸・睡眠・胃腸を少し整えることで、お肌の回復力にもつながりやすくなります。" };
   } else {
-    return {
-      title: "☀️回復力サポートタイプ",
-      message: "今は、お肌だけでなく身体全体の“回復する力”をサポートしてあげたい状態かもしれません。頑張って変えるより、まずは1日1つ、小さく整えることから始めてみましょう。"
-    };
+    return { title: "☀️回復力サポートタイプ", message: "今は、お肌だけでなく身体全体の“回復する力”をサポートしてあげたい状態かもしれません。頑張って変えるより、まずは1日1つ、小さく整えることから始めてみましょう。" };
   }
 }
 
@@ -280,7 +241,6 @@ function drawChart(currentValues, beforeValues) {
   if (radarChart) radarChart.destroy();
 
   const datasets = [];
-
   if (beforeValues) {
     datasets.push({
       label: "ビフォー",
@@ -305,29 +265,14 @@ function drawChart(currentValues, beforeValues) {
 
   radarChart = new Chart(ctx, {
     type: "radar",
-    data: {
-      labels: ["乾燥", "朝の肌", "くすみ", "首肩", "呼吸", "睡眠"],
-      datasets: datasets
-    },
+    data: { labels: ["乾燥", "朝の肌", "くすみ", "首肩", "呼吸", "睡眠"], datasets: datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        r: {
-          min: 0,
-          max: 100,
-          ticks: { stepSize: 25, display: false },
-          pointLabels: { font: { size: 13 }, color: "#3B302C" },
-          grid: { color: "#E4D6D0" },
-          angleLines: { color: "#E4D6D0" }
-        }
+        r: { min: 0, max: 100, ticks: { stepSize: 25, display: false }, pointLabels: { font: { size: 13 }, color: "#3B302C" }, grid: { color: "#E4D6D0" }, angleLines: { color: "#E4D6D0" } }
       },
-      plugins: {
-        legend: {
-          display: beforeValues ? true : false,
-          labels: { color: "#3B302C" }
-        }
-      }
+      plugins: { legend: { display: beforeValues ? true : false, labels: { color: "#3B302C" } } }
     }
   });
 }
